@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>City Size Comparison</title>
+    <title>World's Largest Airports Size Comparison</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -10,56 +10,85 @@
         body { display: flex; }
         #sidebar { width: 300px; padding: 20px; }
         #map { height: 100vh; flex-grow: 1; }
+        .airport-info { margin-top: 20px; font-size: 0.9em; }
     </style>
 </head>
 <body>
     <div id="sidebar">
         <h3>Control Panel</h3>
         <div>
+            <label for="airportSelect">Select Airport:</label>
+            <select id="airportSelect">
+                <option value="8.75">Istanbul Airport</option>
+                <option value="27.95">King Fahd International Airport</option>
+                <option value="78.00">Denver International Airport</option>
+                <option value="39.00">Dallas/Fort Worth International Airport</option>
+                <option value="32.00">Orlando International Airport</option>
+            </select>
+        </div>
+        <div>
             <label for="searchInput">Search City:</label>
             <input type="text" id="searchInput" placeholder="Enter city name">
             <button onclick="searchCity()">Search</button>
+        </div>
+        <div class="airport-info">
+            <h4>Airport Size Information</h4>
+            <ul>
+                <li>King Fahd International Airport: 780 km² (ranked 1st largest)</li>
+                <li>Denver International Airport: 135.71 km² (ranked 2nd largest)</li>
+                <li>Dallas/Fort Worth International Airport: 69.63 km² (ranked 3rd largest)</li>
+                <li>Orlando International Airport: 53.83 km² (ranked 4th largest)</li>
+                <li>Istanbul Airport: 76.5 km² (ranked 5th largest)</li>
+            </ul>
         </div>
     </div>
     <div id="map"></div>
 
     <script>
-      var map = L.map('map').setView([55.6761, 12.5683], 10);
+     var map = L.map('map').setView([55.6761, 12.5683], 10);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '© OpenStreetMap contributors'
 }).addTo(map);
 
 var geocoder = L.Control.Geocoder.nominatim();
-var airportSize = 8.75; // Fixed size for the square
 var airportSquare;
+var lastSearchedLocation = [55.6761, 12.5683]; // Default location (Copenhagen)
 
-function drawSquare(lat, lng) {
+function drawSquare(lat, lng, size) {
     if (airportSquare) {
         map.removeLayer(airportSquare);
     }
 
     var airportArea = L.latLng(lat, lng);
-    var corner1 = airportArea.toBounds(airportSize * 1000).getSouthWest();
-    var corner2 = airportArea.toBounds(airportSize * 1000).getNorthEast();
+    var corner1 = airportArea.toBounds(size * 1000).getSouthWest();
+    var corner2 = airportArea.toBounds(size * 1000).getNorthEast();
 
     airportSquare = L.rectangle([corner1, corner2], {color: "#ff7800", weight: 1}).addTo(map);
     map.fitBounds(airportSquare.getBounds());
 }
 
-drawSquare(55.6761, 12.5683); // Initial square over Copenhagen
+drawSquare(lastSearchedLocation[0], lastSearchedLocation[1], parseFloat(document.getElementById('airportSelect').value));
 
 function searchCity() {
     var query = document.getElementById('searchInput').value;
     geocoder.geocode(query, function(results) {
         if (results.length > 0) {
             var center = results[0].center;
-            drawSquare(center.lat, center.lng);
+            lastSearchedLocation = [center.lat, center.lng];
+            var selectedSize = parseFloat(document.getElementById('airportSelect').value);
+            drawSquare(center.lat, center.lng, selectedSize);
         } else {
             alert('City not found. Please try another name.');
         }
     });
 }
+
+document.getElementById('airportSelect').addEventListener('change', function() {
+    var selectedSize = parseFloat(this.value);
+    drawSquare(lastSearchedLocation[0], lastSearchedLocation[1], selectedSize);
+});
+
 
     </script>
 </body>
