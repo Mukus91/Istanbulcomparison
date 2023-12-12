@@ -8,8 +8,8 @@
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <style>
         body { display: flex; }
-        #sidebar { width: 300px; padding: 20px; }
-        #map { height: 100vh; flex-grow: 1; }
+        #sidebar { width: 23em; padding: 20px; }
+        #map { height: 98vh; flex-grow: 1; }
         .airport-info { margin-top: 20px; font-size: 0.9em; }
     </style>
 </head>
@@ -19,28 +19,26 @@
         <div>
             <label for="airportSelect">Select Airport:</label>
             <select id="airportSelect">
-                <option value="8.75">Istanbul Airport (approx. 76.5 km², 3rd largest)</option>
-                <option value="27.93">King Fahd International Airport (approx. 780 km², largest)</option>
-                <option value="11.65">Denver International Airport (approx. 135.71 km², 2nd largest)</option>
-                <option value="8.34">Dallas/Fort Worth International Airport (approx. 69.63 km², 4th largest)</option>
-                <option value="7.34">Orlando International Airport (approx. 53.83 km², 5th largest)</option>
+                <option value="27.93" >King Fahd International Airport (largest)</option>
+                <option value="11.65">Denver International Airport (2nd largest)</option>
+                <option value="8.75">Istanbul Airport (3rd largest)</option>
+                <option value="8.34">Dallas/Fort Worth International Airport (4th largest)</option>
+                <option value="7.34">Orlando International Airport (5th largest)</option>
             </select>
             
         </div>
-        <div>
+        <div style="margin-top:1em;">
             <label for="searchInput">Search City:</label>
             <input type="text" id="searchInput" placeholder="Enter city name">
             <button onclick="searchCity()">Search</button>
         </div>
         <div class="airport-info">
-            <h4>Airport Size Information</h4>
-            <ul>
-                <li>King Fahd International Airport: 780 km² (ranked 1st largest)</li>
-                <li>Denver International Airport: 135.71 km² (ranked 2nd largest)</li>
-                <li>Istanbul Airport: 76.5 km² (ranked 3rd largest)</li>
-                <li>Dallas/Fort Worth International Airport: 69.63 km² (ranked 4th largest)</li>
-                <li>Orlando International Airport: 53.83 km² (ranked 5th largest)</li>
-            </ul>
+            <h4>Airport Ranking by Size:</h4>
+                <p style="border-color:gold; border-style: solid;">&#129351; King Fahd International Airport: 780 km²</p>
+                <p style="border-color:silver; border-style: solid;"> &#129352; Denver International Airport: 135.71 km²</p>
+                <p style="border-color: #bf8970; border-style: solid;"> &#129353; Istanbul Airport: 76.5 km²</p>
+                <p>4. Dallas/Fort Worth International Airport: 69.63 km²</p>
+                <p>5. Orlando International Airport: 53.83 km²</p>
         </div>
     </div>
     <div id="map"></div>
